@@ -11,11 +11,11 @@
 - git merge <branch>: Incorporar as mudanças de uma branch para a atual. Ao final, deve-se usar o "git push origin <branch_a_ser_atualizada>" para salvar no github.
 - git remote add/set-url origin main <camionho_repositório>: Adiciona ou linka a origem de um novo repositório local à um já existente.
 - git push origin main
-
-
+---
 - git log: mostra, de forma completa, todas as alterações feitas em um repositório.
 - git log --oneline: mostra, de forma resumida, todas as alterações feitas em um repositório.
 - git status: Informa todas as alterações feitas no seu arquivo local em relação ao seu repositório online.
+---
 - git restore --source <codigo_commit> <arquivo>: Restalra uma versão anterior.
 
 
