@@ -1,0 +1,73 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.invalido {
+  border-width: 2px;
+  border-color: red;
+  color: red;
+}
+
+.box {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+fieldset {
+  border-radius: 12px;
+  border-style: solid;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  min-width: 200px;
+  min-height: 200px;
+  height: fit-content;
+  padding-top: 35%;
+  padding-bottom: 2%;
+  padding-right: 10%;
+  padding-left: 10%;
+}
+
+.form-cadastro {
+  text-align: center;
+}
+
+h2 {
+  color: dodgerblue;
+  font-size: 150%;
+  margin-top: -35%;
+}
+
+.input {
+  height: 35px;
+  width: 96%;
+  border-radius: 3px;
+  border-color: rgba(0, 0, 0, 0.6);
+  font-size: 100%;
+  text-indent: 5%;
+}
+
+[class="form padrao-senha"] {
+  font-size: 100%;
+  margin-left: 15px;
+}
+
+button {
+  height: 35px;
+  width: 100%;
+  background-color: dodgerblue;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 100%;
+}
+
+button:hover { 
+  background-color: rgb(26, 74, 123); /* Mudar a cor de fundo do butão ao passar o mouse. */
+  transition: 0.8s; /* Tempo para a mudança de cor */
+}
+
+#erro {
+  color: red;
+  font-size: 70%;
+}

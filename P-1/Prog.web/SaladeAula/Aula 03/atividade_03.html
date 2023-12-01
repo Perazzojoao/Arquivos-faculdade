@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Atividade Investimento</title>
+
+        <style>
+            body
+            {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            table
+            {
+                width: 500px;
+                border-collapse: collapse;
+            }
+            
+            td 
+            {
+                border: 1px solid black;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <h1>Formulário de investimentos</h1>
+        <br>
+
+        <h4>Tabela 01: tipos de investimentos disponíveis</h4>
+
+        <table>
+            <tr style="background-color: gray;">
+                <td style="width: 70px;"><b>Tipo</b></td>
+                <td><b>Descrição</b></td>
+                <td><b>Rendimento Mensal</b></td>
+            </tr>
+
+            <tr>
+                <td>1</td>
+                <td>Poupança</td>
+                <td>3%</td>
+            </tr>
+
+            <tr>
+                <td>2</td>
+                <td>Fundos de Renda Fixa</td>
+                <td>4%</td>
+            </tr>
+        </table>
+        <br>
+
+        <p></p>
+
+        <form action="atividade_03.php" method="post">
+            <p>
+                Tipo de investimento:<br>
+                <input type="text" name="tipo">
+            </p>
+
+            <p>
+                Valor a ser aplicado:<br>
+                <input type="text" name="valor">
+            </p>
+
+            <button>Enviar</button>
+        </form>
+    
+    </body>
+</html>
