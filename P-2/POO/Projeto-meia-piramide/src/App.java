@@ -11,6 +11,7 @@ public class App {
 		while (true) {
 			try {
 				quantidade = scanner.nextInt();
+				scanner.nextLine();
 				if (quantidade > 0) {
 					break;
 				}
@@ -20,11 +21,16 @@ public class App {
 				scanner.next();
 			}
 		}
-		scanner.close();
 
 		piramide.Piramide meiaPiramide = new piramide.Piramide(quantidade);
 		meiaPiramide.imprimeTela();
 
+		System.out.println();
+		System.out.println("Pressione Enter para terminar o programa...");
+		scanner.nextLine();
+		scanner.close();
+
+		System.out.println("Programa terminado.");
 
 	}
 
