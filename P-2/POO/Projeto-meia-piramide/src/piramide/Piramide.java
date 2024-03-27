@@ -33,6 +33,8 @@ public class Piramide {
 
     System.out.print("Os menores valores de cada linha são: ");
     imprimeMenoresValores();
+
+    imprimeSomaMenoresValores();
   }
 
   private void imprimeApresentacao() {
@@ -137,6 +139,20 @@ public class Piramide {
     buildMenoresValores();
     System.out.println(Arrays.toString(this.menoresValores));
   }
+
+  private int somaMenoresValores() {
+    int soma = 0;
+
+    for (int i = 0; i < this.menoresValores.length; i++) {
+      soma += this.menoresValores[i];
+    }
+
+    return soma;
+  }
+
+  private void imprimeSomaMenoresValores() {
+    System.out.println("A soma dos menores valores de cada linha é: " + somaMenoresValores());
+  } 
 }
 
 class PiramideLines {
