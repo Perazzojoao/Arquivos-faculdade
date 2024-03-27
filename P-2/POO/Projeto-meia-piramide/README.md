@@ -2,4 +2,4 @@
 
 > Projeto referente à cadeira de programação orientada a objetos
 
-Oprojeto visa receber uma quantidade de valores, fornecida pelo usuário, a ser inserida aleatoriamente em uma string para, posteriormente, ser convertida em um array e depois transformada em uma meia pirâmide.
+O projeto visa receber uma quantidade de valores, fornecida pelo usuário, a ser inserida aleatoriamente em uma string para, posteriormente, ser convertida em um array e depois transformada em uma meia pirâmide.
