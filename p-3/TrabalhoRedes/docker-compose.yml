@@ -1,0 +1,287 @@
+networks:
+  public:
+    name: public_network
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.10.0/27
+
+  pgadmin:
+    name: pgadmin_network
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.10.32/27
+
+  service01:
+    name: service01_network
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.10.64/27
+
+  service02:
+    name: service02_network
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.10.96/27
+
+  service03:
+    name: service03_network
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.10.128/27
+
+  db01:
+    name: db01_network
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.10.160/28
+
+  db02:
+    name: db02_network
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.10.176/28
+
+  db03:
+    name: db03_network
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.10.192/28
+
+  db_aux01:
+    name: db_aux01_network
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.10.208/28
+
+  db_aux02:
+    name: db_aux02_network
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.10.224/28
+
+  db_aux03:
+    name: db_aux03_network
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.10.240/28
+
+services:
+  traefik:
+    image: traefik:v3.2
+    container_name: traefik
+    command:
+      - '--api.insecure=true'
+      - '--log.level=DEBUG'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--serversTransport.insecureSkipVerify=true'
+      - '--entrypoints.web.address=:80'
+      - '--entryPoints.web.forwardedHeaders.insecure'
+    ports:
+      - '80:80'
+      - '8080:8080'
+    networks:
+      - public
+      - pgadmin
+      - service01
+      - service02
+      - service03
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    networks:
+      - pgadmin
+      - db01
+      - db02
+      - db03
+    restart: unless-stopped
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.pgadmin.rule=Host("pgadmin.localhost")'
+      - 'traefik.http.services.pgadmin.loadbalancer.server.port=80'
+      - 'traefik.http.routers.pgadmin.entrypoints=web'
+      - 'traefik.http.routers.pgadmin.tls=false'
+      - 'traefik.docker.network=pgadmin_network'
+      - 'traefik.http.middlewares.pgadmin.ipallowlist.sourcerange=10.10.10.1/32'
+      - 'traefik.http.middlewares.pgadmin.ipallowlist.ipstrategy.depth=0'
+      - 'traefik.http.routers.pgadmin.middlewares=pgadmin'
+
+  service01:
+    container_name: service01
+    build:
+      context: ./services/src
+      dockerfile: Dockerfile
+    env_file:
+      - ./services/src/.env
+    environment:
+      - DB_HOST=postgres01
+      - DB_NAME=db01 
+    networks:
+      - service01
+      - db01
+    deploy:
+      mode: replicated
+      replicas: 1
+    restart: unless-stopped
+    depends_on:
+      postgres01:
+        condition: service_healthy
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.service01.rule=Host("service01.localhost")'
+      - 'traefik.http.services.service01.loadbalancer.server.port=3000'
+      - 'traefik.http.routers.service01.entrypoints=web'
+      - 'traefik.http.routers.service01.tls=false'
+      - 'traefik.docker.network=service01_network'
+
+  service02:
+    container_name: service02
+    build:
+      context: ./services/src
+      dockerfile: Dockerfile
+    env_file:
+      - ./services/src/.env
+    environment:
+      - DB_HOST=postgres02
+      - DB_NAME=db02 
+    networks:
+      - service02
+      - db02
+    deploy:
+      mode: replicated
+      replicas: 1
+    restart: unless-stopped
+    depends_on:
+      postgres02:
+        condition: service_healthy
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.service02.rule=Host("service02.localhost")'
+      - 'traefik.http.services.service02.loadbalancer.server.port=3000'
+      - 'traefik.http.routers.service02.entrypoints=web'
+      - 'traefik.http.routers.service02.tls=false'
+      - 'traefik.docker.network=service02_network'
+
+  service03:
+    container_name: service03
+    build:
+      context: ./services/src
+      dockerfile: Dockerfile
+    env_file:
+      - ./services/src/.env
+    environment:
+      - DB_HOST=postgres03
+      - DB_NAME=db03 
+    networks:
+      - service03
+      - db03
+    deploy:
+      mode: replicated
+      replicas: 1
+    restart: unless-stopped
+    depends_on:
+      postgres03:
+        condition: service_healthy
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.service03.rule=Host("service03.localhost")'
+      - 'traefik.http.services.service03.loadbalancer.server.port=3000'
+      - 'traefik.http.routers.service03.entrypoints=web'
+      - 'traefik.http.routers.service03.tls=false'
+      - 'traefik.docker.network=service03_network'
+
+  postgres01:
+    container_name: postgres01
+    image: 'postgres'
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=db01
+    networks:
+      - db01
+      - db_aux01
+    volumes:
+      - ./services/postgres01-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U root']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  postgres02:
+    container_name: postgres02
+    image: 'postgres'
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=db02
+    networks:
+      - db02
+      - db_aux02
+    volumes:
+      - ./services/postgres02-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U root']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  postgres03:
+    container_name: postgres03
+    image: 'postgres'
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=db03
+    networks:
+      - db03
+      - db_aux03
+    volumes:
+      - ./services/postgres03-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U root']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
